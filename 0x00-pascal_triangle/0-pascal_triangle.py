@@ -1,6 +1,7 @@
 #!/usr/bin/python3
 """module for pascal_triangle"""
 
+
 def pascal_triangle(n):
     """Returns pascal's triangel."""
     triangle = []
