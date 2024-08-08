@@ -1,5 +1,6 @@
 #!/usr/bin/python3
-"""Module that shows how to find the minimum operations needed to perform the task."""
+"""Module that shows how to find the minimum operations
+needed to perform the task."""
 
 
 def minOperations(n):
@@ -12,4 +13,3 @@ def minOperations(n):
             n /= num
         num += 1
     return res
-
