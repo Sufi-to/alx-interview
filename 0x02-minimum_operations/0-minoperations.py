@@ -12,3 +12,4 @@ def minOperations(n):
             n /= num
         num += 1
     return res
+
