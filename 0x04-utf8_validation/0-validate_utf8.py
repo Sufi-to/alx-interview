@@ -5,22 +5,19 @@
 def validUTF8(data):
     """Returns a boolean for whether the data is valid utf-8"""
     num_b = 0
-    for bite in data:
+    for byte in data:
         if num_b == 0:
-            if bite >> 5 == 0b110:
+            if byte >> 5 == 0b110:
                 num_b = 1
-            elif bite >> 4 == 0b1110:
+            elif byte >> 4 == 0b1110:
                 num_b = 2
-            elif bite >> 3 == 0b11110:
+            elif byte >> 3 == 0b11110:
                 num_b = 3
-            elif bite >> 7:
+            elif byte >> 7:
                 return False
         else:
-            check1 = 1 << 7
-            check2 = 1 << 6
-            if not (bite & check1 and not (bite & check2)):
+            if not (byte >> 6 == 0b10):
                 return False
             num_b -= 1
-        if num_b < 0:
-            return False
+
     return num_b == 0
