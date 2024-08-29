@@ -9,7 +9,7 @@ if len(argv) > 2 or len(argv) < 2:
     exit(1)
 
 if not argv[1].isdigit():
-    print("N must be columns number")
+    print("N must be a number")
     exit(1)
 
 if int(argv[1]) < 4:
