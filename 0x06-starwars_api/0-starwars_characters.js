@@ -5,11 +5,22 @@ const request = require('request');
 const movieId = process.argv[2];
 const filmUrl = `https://swapi-api.hbtn.io/api/films/${movieId}`;
 
-function getFilm (url) {
-  return new Promise(function (resolve, reject) {
-    request(url, function (err, res, body) {
+function requestPromise (url) {
+  return new Promise((resolve, reject) => {
+    request(url, (err, res, body) => {
       if (!err && res.statusCode === 200) {
-        resolve(JSON.parse(body));
+        resolve(JSON.parse(body).characters);
+      } else {
+        reject(err);
+      }
+    });
+  });
+}
+function charPromise (url) {
+  return new Promise((resolve, reject) => {
+    request(url, (err, res, body) => {
+      if (!err && res.statusCode === 200) {
+        resolve(JSON.parse(body).name);
       } else {
         reject(err);
       }
@@ -17,20 +28,20 @@ function getFilm (url) {
   });
 }
 
-async function getActors (filmUrl) {
+async function printChar (url) {
   try {
-    const filmData = await getFilm(filmUrl);
-    for (const charUrl of filmData.characters) {
+    const data = await requestPromise(url);
+    for (let i = 0; i < data.length; i++) {
       try {
-        const charData = await getFilm(charUrl);
-        console.log(charData.name);
-      } catch (error) {
-        console.error(`Error fetching character data: ${error}`);
+        const act = await charPromise(data[i]);
+        console.log(act);
+      } catch (err) {
+        console.log('something went wrong when getting character name');
       }
     }
   } catch (err) {
-    console.error(`Error fetching movie data: ${err}`);
+    console.log('Array of movie characers not returned');
   }
 }
 
-getActors(filmUrl);
+printChar(filmUrl);
