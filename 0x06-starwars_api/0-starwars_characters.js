@@ -1,28 +1,36 @@
 #!/usr/bin/node
-const axios = require('axios');
-const argv = process.argv;
-const movieId = argv[2];
-const urlFilm = 'https://swapi-api.hbtn.io/api/films/';
-const urlMovie = `${urlFilm}${movieId}/`;
+// Script for getting data from the star wars api
 
-axios.get(urlMovie)
-  .then(response => {
-    const characters = response.data.characters;
-    if (characters && characters.length > 0) {
-      fetchCharacters(characters);
-    }
-  })
-  .catch(error => {
-    console.error('Error fetching movie:', error.message);
+const request = require('request');
+const movieId = process.argv[2];
+const filmUrl = `https://swapi-api.hbtn.io/api/films/${movieId}`;
+
+function getFilm (url) {
+  return new Promise(function (resolve, reject) {
+    request(url, function (err, res, body) {
+      if (!err && res.statusCode === 200) {
+        resolve(JSON.parse(body));
+      } else {
+        reject(err);
+      }
+    });
   });
+}
 
-async function fetchCharacters(characters) {
-  for (const characterUrl of characters) {
-    try {
-      const response = await axios.get(characterUrl);
-      console.log(response.data.name);
-    } catch (error) {
-      console.error('Error fetching character:', error.message);
+async function getActors (filmUrl) {
+  try {
+    const filmData = await getFilm(filmUrl);
+    for (const charUrl of filmData.characters) {
+      try {
+        const charData = await getFilm(charUrl);
+        console.log(charData.name);
+      } catch (error) {
+        console.error(`Error fetching character data: ${error}`);
+      }
     }
+  } catch (err) {
+    console.error(`Error fetching movie data: ${err}`);
   }
 }
+
+getActors(filmUrl);
