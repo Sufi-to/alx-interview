@@ -8,13 +8,14 @@ def makeChange(coins, total):
         return 0
     lenArr = len(coins)
     temp = total
+    sortedCoins = sorted(coins)
 
     i = lenArr - 1
     result = []
     while (i >= 0):
-        while (total >= coins[i]):
-            total -= coins[i]
-            result.append(coins[i])
+        while (total >= sortedCoins[i]):
+            total -= sortedCoins[i]
+            result.append(sortedCoins[i])
         i -= 1
     sumResult = sum(result)
     if temp == sumResult:
